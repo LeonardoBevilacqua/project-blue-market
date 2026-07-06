@@ -8,6 +8,7 @@ The table has the following columns:
 - "Name". Helps identify the product.
 - "Date". When the item was bought. Set individually per item, Could be improved with the new app.
 - "Item". A select box with the type of the item, for exemple "Rice", "Beans" or "pet toy".
+- "Para". A select box with the location where the item will be stored.
 - "Quantidade". Integer value of the quantity bought, used to calculate the "Total". Could be improved to be float value to handle quantity by weight.
 - "Valor". The unit value of the item, used to calculate the "Total".
 - "Total". The final price payed for the item.
