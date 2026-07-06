@@ -33,3 +33,15 @@ After finished, the items are updated with actual "Name" and "Valor" from the re
 #### After grocery
 
 Is added items from the receipt after the grocery is done, without prior registration.
+
+## New way
+
+Use an app to manage shopping and improve the existing flow.
+
+### Tech
+
+For this project, it'll use:
+- `penpot`, to create the design and prototype.
+- `Supabase`, with a free project, to handle data storage and authentication.
+- `kotlin`, to have a good and offline first mobile experience.
+- `sveltekit`, with static build for free hosting, to have a desktop version with more feature like dashboards and charts.
