@@ -1,28 +1,60 @@
 # New approach
 
-Use an app along with web app to manage shopping and improve the existing flow.
+Use an Mobile App along with Web App to manage shopping and improve the existing flow.
 
 ## Improvements
 
-The items now should be grouped by a market list, which should contain:
-- Set the context to be able to include all kind of shopping, for exemple grocery or pet stores.
-- Field for the kind of shopping.
-- Field for the place where the shopping was done.
-- Field for the date, moving away from the individual item.
-- Optional field for the name, when not set, should default to "PLACE - DATE".
-- The quantity field should be now a floating value, to represent value by weight.
+The items now should be grouped by a market list, which should:
+- Set the context, to be able to include all kind of shopping, for exemple grocery or pet stores.
+    - Include a new field for the kind of shopping.
+    - Include a new field for the place where the shopping was done.
+    - Include a new optional field for the name, when not set, should default to "PLACE - DATE".
+- Include a new field for the date, removing from the individual item.
+- In the item, should:
+    - Include a new optional field for barcode, to easy map the item.
+    - The quantity field should be now a floating value, to represent value by weight.
 
 ## For Mobile App and Web App
 
 Both apps should be capable of:
-- Manage kind of shopping.
+- Manage kind of shopping. In the Kind of shopping page:
+    - List all created contexts. At least one should exists, called "default".
+    - Button to create new kind, by adding the name of context.
+    - Edit the name from existing kind.
+    - Delete existing kind. Once deleting, all other items that depend on it should change to the "default".
 - Manage item type by kind.
-- manage market list.
+    - List all created types, filtered by the kind. At least one should exists, called "undefined".
+    - Button to create new type, by adding the name of type and linking with the kind, initialize with "default".
+    - Edit the name from existing type.
+    - Delete existing type. Once deleting, all other types that depend on it should change to `NULL`.
+    - Can be created during item management.
+- Manage item location.
+    - List all created locations.
+    - Button to create new location.
+    - Edit the name from existing location.
+    - Delete existing type.
+    - Can be created during item management.
+- Manage market list place.
+    - List all created places.
+    - Button to create new place.
+    - Edit the name from existing place.
+    - Delete existing place.
+    - Can be created during market list management.
+- Manage market list by kind.
+    - List all created market list, filtered by the kind and date.
+    - Button to create new market list, by adding the date, place, name of list (optional), linking with the kind and adding the list of items.
+        - The list items should contain the product name, type, location, quantity, unit value, optional barcode, and display the total
+    - Edit details of the list and the items.
+    - Delete items from the list or the whole list.
 
-## For Mobile App
+### For Mobile App
 
 Should be able to handle offline first. A local database should exists and sincronize the cloud.
 
-## For Web App
+### For Web App
 
 Should be able to have dashboards and charts for data analysis.
+
+## Import data
+
+An especial flow is needed to be able to import the data from the notion tables.
