@@ -1,7 +1,7 @@
 # Required data management
 
 The market list and it items will require some data to be previously created, to later help us easily identify and filter the lists and items.
-All of them should be mapped with at least an ID and the name.
+All of them should be mapped with at least an ID and a name.
 
 ## Kind of shopping
 

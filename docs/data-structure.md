@@ -1,6 +1,6 @@
 # Data structure
 
-The ID fields should either UUID or Integer.
+The ID fields should either be UUID or Integer.
 
 - Kind of shopping
     - ID
@@ -26,7 +26,12 @@ The ID fields should either UUID or Integer.
     - Name: String
     - Quantity: Floating value
     - Unit value: Floating value
-    - Total: Floating value
-    - Barcode: integer
+    - Total value: Floating value
+    - Barcode: String
+    - Created date: Date 
+    - Modified date: Date 
+    - Cloud modified date: Date (mobile app only)
+    - Synchronized: Boolean (mobile app only)
+    - Market list ID
     - Type ID
     - Location ID
