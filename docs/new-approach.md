@@ -47,6 +47,8 @@ Both apps should be capable of:
     - Edit details of the list and the items.
     - Delete items from the list or the whole list.
 
+Check [Data structure](./data-structure.md) for details of each managed data.
+
 ### For Mobile App
 
 Should be able to handle offline first. A local database should exists and synchronize the cloud.
