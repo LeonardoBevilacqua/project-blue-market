@@ -60,6 +60,9 @@ Should be able to handle offline first. A local database should exists and synch
 ### For Web App
 
 Should be able to have dashboards and charts for data analysis.
+- Can be included charts to analyse the unit price of items.
+- Card to the total spent in the month for each kind.
+- Card to compare the average unit price per kind.
 
 ## Import data
 
