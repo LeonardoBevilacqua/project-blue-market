@@ -49,7 +49,13 @@ Both apps should be capable of:
 
 ### For Mobile App
 
-Should be able to handle offline first. A local database should exists and sincronize the cloud.
+Should be able to handle offline first. A local database should exists and synchronize the cloud.
+- The local database should have the relevant data, along with a cloud modified date, local modified date and synchronized flag.
+- When the flag is true and both modified date are almost the same (with few seconds or minutes of difference) that means the data is synchronized.
+- When the flag is false and local modified date is ahead, that means that local data need to be sent to the could.
+- Before synchronizing, need to fetch the item from the cloud.
+    - If the cloud modified date is the same, that means that the data wasn't changed and the new data can be uploaded.
+    - If the cloud modified date has changed, that means that the data was changed elsewhere and the user need to decide which version to keep.
 
 ### For Web App
 
