@@ -17,24 +17,24 @@ The items now should be grouped by a market list, which should:
 ## For Mobile App and Web App
 
 Both apps should be capable of:
-- Manage kind of shopping. In the Kind of shopping page:
+- Manage [kind of shopping](./required-data-management.md). In the Kind of shopping page:
     - List all created contexts. At least one should exists, called "default".
     - Button to create new kind, by adding the name of context.
     - Edit the name from existing kind.
     - Delete existing kind. Once deleting, all other items that depend on it should change to the "default".
-- Manage item type by kind.
+- Manage [item type by kind](./required-data-management.md).
     - List all created types, filtered by the kind. At least one should exists, called "undefined".
     - Button to create new type, by adding the name of type and linking with the kind, initialize with "default".
     - Edit the name from existing type.
     - Delete existing type. Once deleting, all other types that depend on it should change to `NULL`.
     - Can be created during item management.
-- Manage item location.
+- Manage [item location](./required-data-management.md).
     - List all created locations.
     - Button to create new location.
     - Edit the name from existing location.
     - Delete existing type.
     - Can be created during item management.
-- Manage market list place.
+- Manage [market list place](./required-data-management.md).
     - List all created places.
     - Button to create new place.
     - Edit the name from existing place.
