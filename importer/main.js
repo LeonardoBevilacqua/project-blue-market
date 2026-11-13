@@ -1,4 +1,6 @@
 import { createServer } from "node:http";
+import path from "path";
+import fs from "fs";
 
 const HOSTNAME = "127.0.0.1";
 const PORT = 8080;
@@ -10,6 +12,12 @@ const DEFAULT_HEADERS = {
   Authorization: `Bearer ${process.env.PAT}`,
   "Content-Type": "application/json",
   "Notion-Version": NOTION_VERSION,
+};
+const CLIENT_DIR = path.join(import.meta.dirname, "./public");
+const MIME_TYPES = {
+  ".html": "text/html",
+  ".css": "text/css",
+  ".js": "application/javascript",
 };
 
 /** @param {string} secret */
@@ -64,19 +72,40 @@ async function getEnumsMetadata() {
 }
 
 const server = createServer(({ url, method }, res) => {
-  if (url == "/metadata" && method == "GET") {
+  if (url == "/api/metadata" && method == "GET") {
     getEnumsMetadata().then((result) => {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(result));
+      res
+        .writeHead(200, { "Content-Type": "application/json" })
+        .end(JSON.stringify(result));
     });
     return;
   }
 
-  console.warn("Not found", url, method);
-  res.statusCode = 404;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("Not Found!\n");
+  const filePath = url === "/" ? "index.html" : url;
+  const targetPath = path.join(CLIENT_DIR, filePath);
+  console.log({ CLIENT_DIR, filePath, targetPath });
+
+  // Security check
+  if (!targetPath.startsWith(CLIENT_DIR)) {
+    res.writeHead(403, { "Content-Type": "text/plain" }).end("403 Forbidden");
+    return;
+  }
+
+  const extname = path.extname(targetPath).toLowerCase();
+  const contentType = MIME_TYPES[extname] || "application/octet-stream";
+
+  fs.stat(targetPath, (err, stats) => {
+    if (err || !stats.isFile()) {
+      res
+        .writeHead(404, { "Content-Type": "text/html" })
+        .end("<h1>404 Not Found</h1>");
+      return;
+    }
+
+    // Stream the file contents to the response
+    res.writeHead(200, { "Content-Type": contentType });
+    fs.createReadStream(targetPath).pipe(res);
+  });
 });
 
 if (!process.env.PAT) throw new Error(SECRET_ERROR_MESSAGE_TEMPLATE("PAT"));
