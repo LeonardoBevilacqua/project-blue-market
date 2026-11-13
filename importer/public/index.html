@@ -10,5 +10,45 @@
   <body>
     <h1>Notion Market Importer</h1>
     <hr />
+
+    <fieldset>
+      <legend>Dados da nota fiscal</legend>
+
+      <form id="csv-form">
+        <label for="itemsCsv">Items no formato CSV</label>
+        <textarea id="itemsCsv" name="itemsCsv"></textarea>
+
+        <button type="submit">Processar</button>
+      </form>
+    </fieldset>
+
+    <fieldset>
+      <legend>Compras</legend>
+
+      <form>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantidade</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="3">Insira os dados no formulario acima</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">Total:</td>
+              <td id="tableFooterTotal">0,00</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <button type="submit" disabled>Salvar</button>
+      </form>
+    </fieldset>
   </body>
 </html>
