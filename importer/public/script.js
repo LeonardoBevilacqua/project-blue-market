@@ -1,4 +1,12 @@
+/** @typedef {Object} CsvData
+ * @property {}
+ * @property {string} item
+ * @property {number} qtd
+ * @property {number} value
+ */
 const SERVER_URL = "http://localhost:8080";
+/** @type {CsvData[]} */
+let csvDataList = [];
 
 function fetchMetadata() {
   fetch(`${SERVER_URL}/api/metadata`)
@@ -7,22 +15,36 @@ function fetchMetadata() {
     .catch((error) => console.error("Could not fetch the metadata", error));
 }
 
+/** @param {string} value */
+function strToNumber(value) {
+  return Number(value.replaceAll(",", "."));
+}
+
 /** @param {string} row */
 function mapData(row) {
-  let [item, qtd, value] = row.split(";");
+  let [item, qtdStr, valueStr] = row.split(";");
+  const qtd = strToNumber(qtdStr);
+  const value = strToNumber(valueStr);
 
   return { item, qtd, value };
+}
+
+function updateTableFooter() {
+  const tableFooterTotal = document.getElementById("tableFooterTotal");
+  tableFooterTotal.innerHTML = csvDataList.reduce(
+    (acc, { value }) => (acc += value),
+    0,
+  );
 }
 
 /** @param {string} csvContent */
 function fromCsv(csvContent) {
   const rows = csvContent.trim().split("\n");
-  const dataList = rows.map((row) => mapData(row));
+  csvDataList = rows.map((row) => mapData(row));
 
   const tableBodyElem = document.getElementById("tableBody");
-  const tableFooterTotal = document.getElementById("tableFooterTotal");
 
-  tableBodyElem.innerHTML = dataList
+  tableBodyElem.innerHTML = csvDataList
     .map(
       ({ item, qtd, value }, index) => `
       <tr>
@@ -34,11 +56,7 @@ function fromCsv(csvContent) {
     )
     .join("");
 
-  console.log(dataList.map(({ value }) => new Number(value)));
-  tableFooterTotal.innerHTML = dataList.reduce(
-    (acc, { value }) => (acc += new Number(value.replaceAll(",", "."))),
-    0,
-  );
+  updateTableFooter();
 }
 
 /** @param {SubmitEvent} event */
@@ -51,7 +69,26 @@ function processCsv(event) {
   fromCsv(csvContent);
 }
 
+/** @param {Event} event */
+function onTableFormChange(event) {
+  const value = event.target.value;
+  const [indexStr, field] = event.target.id.split("-");
+  const index = Number(indexStr);
+  switch (field) {
+    case "qtd":
+      csvDataList[index].qtd = Number(value);
+      break;
+    default:
+      csvDataList[index].value = Number(value);
+      break;
+  }
+  updateTableFooter();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   fetchMetadata();
   document.getElementById("csv-form").addEventListener("submit", processCsv);
+  document
+    .getElementById("table-form")
+    .addEventListener("change", onTableFormChange);
 });
