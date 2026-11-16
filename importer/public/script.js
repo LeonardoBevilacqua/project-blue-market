@@ -33,6 +33,7 @@ function fetchMetadata() {
     .then((body) => {
       itemOptions = body.itemOptions;
       locationOptions = body.locationOptions;
+      document.getElementById("csvFormButton").removeAttribute("disabled");
     })
     .catch((error) => console.error("Could not fetch the metadata", error));
 }
