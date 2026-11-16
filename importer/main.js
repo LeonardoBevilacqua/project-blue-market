@@ -6,7 +6,6 @@ const HOSTNAME = "127.0.0.1";
 const PORT = 8080;
 const NOTION_VERSION = "2026-03-11";
 const NOTION_URL = "https://api.notion.com";
-const DATABASE_ID = "f80a455e60c243909c0d0b3aa2f236a3";
 const DATA_SOURCE_ID = "b692daee-6d3d-4bde-85a1-1aeae9ae1036";
 const DEFAULT_HEADERS = {
   Authorization: `Bearer ${process.env.PAT}`,
@@ -24,20 +23,6 @@ const MIME_TYPES = {
 const SECRET_ERROR_MESSAGE_TEMPLATE = (secret) =>
   `Include ${secret} by exporting the variable or assign before starting the server`;
 
-async function fetchDatabases() {
-  try {
-    const response = await fetch(`${NOTION_URL}/v1/databases/${DATABASE_ID}`, {
-      method: "GET",
-      headers: DEFAULT_HEADERS,
-    });
-
-    return response.json();
-  } catch (error) {
-    console.error(`Could not get the database`, error);
-  }
-  return null;
-}
-
 async function fetchDataSources() {
   try {
     const response = await fetch(
@@ -51,6 +36,37 @@ async function fetchDataSources() {
   } catch (error) {
     console.error(`Could not get the database`, error);
   }
+  return null;
+}
+
+async function newDataSourcePage() {
+  const requestBody = {
+    parent: { type: "data_source_id", data_source_id: DATA_SOURCE_ID },
+    icon: {
+      type: "emoji",
+      emoji: "🛒",
+    },
+    properties: {
+      Nome: { title: [{ text: { content: "test" } }] },
+      Date: { date: { start: "2026-11-15" } },
+      Item: { select: { id: "282e7d83-6a2e-4995-a25c-7c1b4d52c05c" } },
+      Para: { select: { id: "96b8b695-834c-4813-a992-7d90289cadd8" } },
+      Quantidade: { number: 1 },
+      Valor: { number: 2.12 },
+    },
+  };
+
+  try {
+    const response = await fetch(`${NOTION_URL}/v1/pages`, {
+      method: "POST",
+      headers: DEFAULT_HEADERS,
+      body: JSON.stringify(requestBody),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error(`Could not create new data source page`, error);
+  }
+
   return null;
 }
 
@@ -74,6 +90,18 @@ async function getEnumsMetadata() {
 const server = createServer(({ url, method }, res) => {
   if (url == "/api/metadata" && method == "GET") {
     getEnumsMetadata().then((result) => {
+      res
+        .writeHead(200, { "Content-Type": "application/json" })
+        .end(JSON.stringify(result));
+    });
+    return;
+  } else if (url == "/api/data_sources" && method == "GET") {
+    newDataSourcePage().then((result) => {
+      if (!result) {
+        res
+          .writeHead(403, { "Content-Type": "application/json" })
+          .end(JSON.stringify({ status: "error" }));
+      }
       res
         .writeHead(200, { "Content-Type": "application/json" })
         .end(JSON.stringify(result));

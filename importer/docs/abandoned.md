@@ -80,3 +80,43 @@ server.listen(PORT, HOSTNAME, () => {
   console.log(`Server running at http://${HOSTNAME}:${PORT}/`);
 });
 ```
+
+## Fetch Database
+
+```javascript
+const DATABASE_ID = "f80a455e60c243909c0d0b3aa2f236a3";
+async function fetchDatabases() {
+  try {
+    const response = await fetch(`${NOTION_URL}/v1/databases/${DATABASE_ID}`, {
+      method: "GET",
+      headers: DEFAULT_HEADERS,
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error(`Could not get the database`, error);
+  }
+  return null;
+}
+```
+
+## Query Data Source
+
+```javascript
+async function queryDataSource() {
+  try {
+    const response = await fetch(
+      `${NOTION_URL}/v1/data_sources/${DATA_SOURCE_ID}/query`,
+      {
+        method: "POST",
+        headers: DEFAULT_HEADERS,
+      },
+    );
+    return await response.json();
+  } catch (error) {
+    console.error(`Could not create new data source`, error);
+  }
+
+  return null;
+}
+```
