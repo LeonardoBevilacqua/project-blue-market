@@ -83,7 +83,6 @@ const server = createServer(({ url, method }, res) => {
 
   const filePath = url === "/" ? "index.html" : url;
   const targetPath = path.join(CLIENT_DIR, filePath);
-  console.log({ CLIENT_DIR, filePath, targetPath });
 
   // Security check
   if (!targetPath.startsWith(CLIENT_DIR)) {
