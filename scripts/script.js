@@ -1,4 +1,13 @@
 /**
+ * @typedef {Object} Data
+ * @property {string} value
+ * @property {string} item
+ * @property {string} barcode
+ * @property {string} qtd
+ * @property {string} qtdType
+ * @property {string} unitValue
+ */
+/**
  * @param {HTMLElement | Element | HTMLTableRowElement | null} element
  * @param {string} errorMessage
  */
@@ -112,4 +121,13 @@ function get_data() {
   return { title, data };
 }
 
-console.log(get_data());
+/** @param {Data[]} dataList */
+function to_csv(dataList) {
+  return dataList
+    .map(({ item, qtd, value }) => `${item};${qtd};${value}`)
+    .join("\n");
+}
+
+const result = get_data();
+console.log(result);
+console.log(to_csv(result.data));
