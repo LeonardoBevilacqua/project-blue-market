@@ -57,6 +57,7 @@ function updateTableBody() {
           <td>${item}</td>
           <td>
             <input
+              required
               id="${index}-qtd"
               name="${index}-qtd"
               type="text"
@@ -65,6 +66,7 @@ function updateTableBody() {
           </td>
           <td>
             <input
+              required
               id="${index}-value"
               name="${index}-value"
               type="text"
@@ -72,7 +74,7 @@ function updateTableBody() {
             />
           </td>
           <td>
-            <select id="${index}-location" name="${index}-location">
+            <select required id="${index}-location" name="${index}-location">
               ${locationOptions.map(
                 (option) =>
                   `<option value="${option.id}">${option.name}</option>`,
@@ -80,7 +82,7 @@ function updateTableBody() {
             </select>
           </td>
           <td>
-            <select id="${index}-item" name="${index}-item">
+            <select required id="${index}-item" name="${index}-item">
               ${itemOptions.map((option) => `<option value="${option.id}">${option.name}</option>`)}
             </select>
           </td>
