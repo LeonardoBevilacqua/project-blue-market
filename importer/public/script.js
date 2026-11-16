@@ -1,17 +1,27 @@
 /** @typedef {Object} CsvData
- * @property {}
  * @property {string} item
  * @property {number} qtd
  * @property {number} value
  */
+/** @typedef {Object} Metadata
+ * @property {string} id
+ * @property {name} name
+ */
 const SERVER_URL = "http://localhost:8080";
 /** @type {CsvData[]} */
 let csvDataList = [];
+/** @type {Metadata[]} */
+let itemOptions = [];
+/** @type {Metadata[]} */
+let locationOptions = [];
 
 function fetchMetadata() {
   fetch(`${SERVER_URL}/api/metadata`)
     .then((response) => response.json())
-    .then((body) => console.log(body))
+    .then((body) => {
+      itemOptions = body.itemOptions;
+      locationOptions = body.locationOptions;
+    })
     .catch((error) => console.error("Could not fetch the metadata", error));
 }
 
@@ -47,12 +57,39 @@ function fromCsv(csvContent) {
   tableBodyElem.innerHTML = csvDataList
     .map(
       ({ item, qtd, value }, index) => `
-      <tr>
-        <td>${item}</td>
-        <td><input id="${index}-qtd" name="${index}-qtd" type="text" value="${qtd}" /></td>
-        <td><input id="${index}-value" name="${index}-value" type="text" value="${value}" /></td>
-      </tr>
-    `,
+        <tr>
+          <td>${item}</td>
+          <td>
+            <input
+              id="${index}-qtd"
+              name="${index}-qtd"
+              type="text"
+              value="${qtd}"
+            />
+          </td>
+          <td>
+            <input
+              id="${index}-value"
+              name="${index}-value"
+              type="text"
+              value="${value}"
+            />
+          </td>
+          <td>
+            <select id="${index}-location" name="${index}-location">
+              ${locationOptions.map(
+                (option) =>
+                  `<option value="${option.id}">${option.name}</option>`,
+              )}
+            </select>
+          </td>
+          <td>
+            <select id="${index}-item" name="${index}-item">
+              ${itemOptions.map((option) => `<option value="${option.id}">${option.name}</option>`)}
+            </select>
+          </td>
+        </tr>
+      `,
     )
     .join("");
 
@@ -78,7 +115,7 @@ function onTableFormChange(event) {
     case "qtd":
       csvDataList[index].qtd = Number(value);
       break;
-    default:
+    case "value":
       csvDataList[index].value = Number(value);
       break;
   }
