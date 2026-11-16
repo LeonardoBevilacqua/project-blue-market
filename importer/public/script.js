@@ -47,11 +47,7 @@ function updateTableFooter() {
   );
 }
 
-/** @param {string} csvContent */
-function fromCsv(csvContent) {
-  const rows = csvContent.trim().split("\n");
-  csvDataList = rows.map((row) => mapData(row));
-
+function updateTableBody() {
   const tableBodyElem = document.getElementById("tableBody");
 
   tableBodyElem.innerHTML = csvDataList
@@ -92,7 +88,15 @@ function fromCsv(csvContent) {
       `,
     )
     .join("");
+}
 
+/** @param {string} csvContent */
+function fromCsv(csvContent) {
+  const rows = csvContent.trim().split("\n");
+  csvDataList = rows.map((row) => mapData(row));
+
+  updateTableBody();
+  document.getElementById("tableFormSubmitButton").removeAttribute("disabled");
   updateTableFooter();
 }
 

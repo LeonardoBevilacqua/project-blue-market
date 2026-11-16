@@ -26,6 +26,9 @@
       <legend>Compras</legend>
 
       <form id="table-form">
+        <label for="date">Data:</label>
+        <input type="date" id="date" name="date" />
+
         <table border="1">
           <thead>
             <tr>
@@ -49,7 +52,9 @@
           </tfoot>
         </table>
 
-        <button type="submit" disabled>Salvar</button>
+        <button id="tableFormSubmitButton" type="submit" disabled>
+          Salvar
+        </button>
       </form>
     </fieldset>
   </body>
