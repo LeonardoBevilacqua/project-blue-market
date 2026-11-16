@@ -13,9 +13,13 @@
 ### TODO
 
 - [ ] Create Base HTML and JS.
-- [ ] Test notion integration.
-- [ ] Get `Enum` values from notion.
+- [x] Test notion integration.
+- [x] Get `Enum` values from notion.
 - [ ] Final: CSS.
+
+### Getting Started
+
+Use the command `node --watch --env-file=.env main.js` to start the server, with hot reload and environment secrets. The secret is the Notion's Personal Access Token: `PAT=MY_TOKEN`.
 
 ## Integration
 
