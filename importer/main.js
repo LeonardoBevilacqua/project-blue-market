@@ -72,7 +72,9 @@ async function newDataSourcePage() {
 
 /** @param {{id: string; name: string; color: string; description: null | string}[]} options */
 function mapOptions(options) {
-  return options.map(({ id, name }) => ({ id, name }));
+  return options
+    .map(({ id, name }) => ({ id, name }))
+    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 }
 
 async function getEnumsMetadata() {
