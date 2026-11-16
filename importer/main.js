@@ -1,6 +1,20 @@
 import { createServer } from "node:http";
 import path from "path";
 import fs from "fs";
+import { text } from "node:stream/consumers";
+
+/**
+ * @typedef {Object} DataSourceDetailsItem
+ * @property {number} qtd
+ * @property {number} value
+ * @property {string} location
+ * @property {string} item
+ * @property {string} name
+ */
+/** @typedef {Object} DataSourceDetails
+ * @property {string} date
+ * @property {DataSourceDetailsItem[]} items
+ */
 
 const HOSTNAME = "127.0.0.1";
 const PORT = 8080;
@@ -39,7 +53,12 @@ async function fetchDataSources() {
   return null;
 }
 
-async function newDataSourcePage() {
+/** @param {string} date
+ * @param {DataSourceDetailsItem} dataSourceDetailsItem */
+async function postNewDataSourcePage(
+  date,
+  { item, qtd, location, value, name },
+) {
   const requestBody = {
     parent: { type: "data_source_id", data_source_id: DATA_SOURCE_ID },
     icon: {
@@ -47,16 +66,17 @@ async function newDataSourcePage() {
       emoji: "🛒",
     },
     properties: {
-      Nome: { title: [{ text: { content: "test" } }] },
-      Date: { date: { start: "2026-11-15" } },
-      Item: { select: { id: "282e7d83-6a2e-4995-a25c-7c1b4d52c05c" } },
-      Para: { select: { id: "96b8b695-834c-4813-a992-7d90289cadd8" } },
-      Quantidade: { number: 1 },
-      Valor: { number: 2.12 },
+      Nome: { title: [{ text: { content: name } }] },
+      Date: { date: { start: date } },
+      Item: { select: { id: item } },
+      Para: { select: { id: location } },
+      Quantidade: { number: Number(qtd) },
+      Valor: { number: Number(value) },
     },
   };
 
   try {
+    console.log(`Posting ${name} - (${date})`);
     const response = await fetch(`${NOTION_URL}/v1/pages`, {
       method: "POST",
       headers: DEFAULT_HEADERS,
@@ -89,7 +109,24 @@ async function getEnumsMetadata() {
   return { itemOptions, locationOptions };
 }
 
-const server = createServer(({ url, method }, res) => {
+/** @param {IncomingMessage} request */
+async function createNewDataSourcePage(request) {
+  /** @type {DataSourceDetails} */
+  const requestBody = JSON.parse(await text(request));
+
+  for (const item of requestBody.items) {
+    const result = await postNewDataSourcePage(requestBody.date, item);
+    if (!result)
+      return { ok: false, status: `Error with item: ${JSON.stringify(item)}` };
+
+    if (result && result.status == 400) return { ok: false, status: result };
+  }
+
+  return { ok: true, status: "success" };
+}
+
+const server = createServer((request, res) => {
+  const { url, method } = request;
   if (url == "/api/metadata" && method == "GET") {
     getEnumsMetadata().then((result) => {
       res
@@ -97,16 +134,12 @@ const server = createServer(({ url, method }, res) => {
         .end(JSON.stringify(result));
     });
     return;
-  } else if (url == "/api/data_sources" && method == "GET") {
-    newDataSourcePage().then((result) => {
-      if (!result) {
-        res
-          .writeHead(403, { "Content-Type": "application/json" })
-          .end(JSON.stringify({ status: "error" }));
-      }
-      res
-        .writeHead(200, { "Content-Type": "application/json" })
-        .end(JSON.stringify(result));
+  } else if (url == "/api/data_sources" && method == "POST") {
+    createNewDataSourcePage(request).then((result) => {
+      if (!result) res.writeHead(403, { "Content-Type": "application/json" });
+      else res.writeHead(200, { "Content-Type": "application/json" });
+
+      res.end(JSON.stringify(result));
     });
     return;
   }

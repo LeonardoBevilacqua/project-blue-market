@@ -7,6 +7,18 @@
  * @property {string} id
  * @property {name} name
  */
+/**
+ * @typedef {Object} DataSourceDetailsItem
+ * @property {number} qtd
+ * @property {number} value
+ * @property {string} location
+ * @property {string} item
+ * @property {string} name
+ */
+/** @typedef {Object} DataSourceDetails
+ * @property {string} date
+ * @property {DataSourceDetailsItem[]} items
+ */
 const SERVER_URL = "http://localhost:8080";
 /** @type {CsvData[]} */
 let csvDataList = [];
@@ -54,7 +66,15 @@ function updateTableBody() {
     .map(
       ({ item, qtd, value }, index) => `
         <tr>
-          <td>${item}</td>
+          <td>
+            <input
+              required
+              id="${index}-name"
+              name="${index}-name"
+              type="text"
+              value="${item.trim()}"
+            />
+          </td>
           <td>
             <input
               required
@@ -83,7 +103,10 @@ function updateTableBody() {
           </td>
           <td>
             <select required id="${index}-item" name="${index}-item">
-              ${itemOptions.map((option) => `<option value="${option.id}">${option.name}</option>`)}
+              ${itemOptions.map(
+                (option) =>
+                  `<option value="${option.id}">${option.name}</option>`,
+              )}
             </select>
           </td>
         </tr>
@@ -128,10 +151,52 @@ function onTableFormChange(event) {
   updateTableFooter();
 }
 
+/** @param {FormData} formData */
+function mapDataSourceDetails(formData) {
+  /** @type {DataSourceDetails} */
+  const dataSourceDetails = {
+    date: "",
+    items: [],
+  };
+  for (const [key, value] of formData.entries()) {
+    if (key === "date") {
+      dataSourceDetails.date = value;
+      continue;
+    }
+    const [indexStr, field] = key.split("-");
+    const index = Number(indexStr);
+
+    if (!dataSourceDetails.items[index]) {
+      dataSourceDetails.items.push({ [field]: value });
+      continue;
+    }
+    dataSourceDetails.items[index][field] = value;
+  }
+
+  return dataSourceDetails;
+}
+
+/** @param {SubmitEvent} event */
+function onTableFormSubmit(event) {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const dataSourceDetails = mapDataSourceDetails(formData);
+
+  fetch(`${SERVER_URL}/api/data_sources`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dataSourceDetails),
+  })
+    .then((response) => response.json())
+    .then((body) => console.log(body))
+    .catch((error) => console.error("Could not save:", error));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   fetchMetadata();
   document.getElementById("csv-form").addEventListener("submit", processCsv);
-  document
-    .getElementById("table-form")
-    .addEventListener("change", onTableFormChange);
+  const tableForm = document.getElementById("table-form");
+  tableForm.addEventListener("change", onTableFormChange);
+  tableForm.addEventListener("submit", onTableFormSubmit);
 });
