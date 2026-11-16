@@ -15,8 +15,14 @@
       <legend>Dados da nota fiscal</legend>
 
       <form id="csv-form">
-        <label for="itemsCsv">Items no formato CSV</label>
-        <textarea id="itemsCsv" name="itemsCsv"></textarea>
+        <div class="form-field-control">
+          <label for="itemsCsv">Items no formato CSV:</label>
+          <textarea
+            id="itemsCsv"
+            name="itemsCsv"
+            placeholder="SALG.BATATA PRI;1;14,89&#10;BISC.VIEIRA PRI;1;23,29&#10;BISC.VIEIRA PRI;1;16,79&#10;FAR.D.BENTA 1kg;1;5,09"
+          ></textarea>
+        </div>
 
         <button id="csvFormButton" type="submit" disabled>Processar</button>
       </form>
@@ -26,8 +32,10 @@
       <legend>Compras</legend>
 
       <form id="table-form">
-        <label for="date">Data:</label>
-        <input type="date" id="date" name="date" required />
+        <div class="form-field-control">
+          <label for="date">Data:</label>
+          <input type="date" id="date" name="date" required />
+        </div>
 
         <table border="1">
           <thead>
@@ -41,7 +49,9 @@
           </thead>
           <tbody id="tableBody">
             <tr>
-              <td colspan="5">Insira os dados no formulario acima</td>
+              <td colspan="5" id="emptyTable">
+                Insira os dados no formulario acima
+              </td>
             </tr>
           </tbody>
           <tfoot>
