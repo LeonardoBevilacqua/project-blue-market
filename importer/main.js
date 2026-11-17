@@ -37,6 +37,7 @@ const MIME_TYPES = {
 const SECRET_ERROR_MESSAGE_TEMPLATE = (secret) =>
   `Include ${secret} by exporting the variable or assign before starting the server`;
 
+/** [Retrieve a data source](https://developers.notion.com/reference/retrieve-a-data-source) */
 async function fetchDataSources() {
   try {
     const response = await fetch(
@@ -53,7 +54,8 @@ async function fetchDataSources() {
   return null;
 }
 
-/** @param {string} date
+/** [Create a page](https://developers.notion.com/reference/post-page)
+ * @param {string} date
  * @param {DataSourceDetailsItem} dataSourceDetailsItem */
 async function postNewDataSourcePage(
   date,
