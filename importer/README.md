@@ -12,10 +12,12 @@
 
 ### TODO
 
-- [ ] Create Base HTML and JS.
+- [x] Create Base HTML and JS.
 - [x] Test notion integration.
 - [x] Get `Enum` values from notion.
-- [ ] Final: CSS.
+- [x] Final: CSS.
+- [ ] Create notification system to inform if saved or failed.
+- [ ] Allow to change databases.
 
 ### Getting Started
 
