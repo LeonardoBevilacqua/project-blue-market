@@ -6,6 +6,9 @@
   --dark-3-color: #111;
   --light-1-color: #ddd;
   --fieldset-bg: var(--dark-2-color);
+  --notification-bg: var(--dark-2-color);
+  --notification-bg-error: #522;
+  --notification-bg-success: #252;
   --border-color: var(--light-1-color);
 }
 
@@ -26,6 +29,32 @@ button {
 
 h1 {
   font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+aside.notification {
+  background-color: var(--notification-bg);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+
+  & > div.header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &.success {
+    background-color: var(--notification-bg-success);
+  }
+
+  &.error {
+    background-color: var(--notification-bg-error);
+  }
+  &.hidden {
+    display: none;
+  }
 }
 
 fieldset {

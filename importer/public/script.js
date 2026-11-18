@@ -190,9 +190,41 @@ function onTableFormSubmit(event) {
     body: JSON.stringify(dataSourceDetails),
   })
     .then((response) => response.json())
-    .then((body) => console.log(body))
-    .catch((error) => console.error("Could not save:", error));
+    .then((body) => {
+      console.log(body);
+      showNotification(
+        "success",
+        "Salvo com sucesso!",
+        "Dados salvo na tabela do notion.",
+      );
+    })
+    .catch((error) => {
+      console.error("Could not save:", error);
+      showNotification(
+        "error",
+        "Falha ao salvar!",
+        "Dados não foram salvos, verifique os logs.",
+      );
+    });
 }
+
+/** === Notification === */
+function hideNotification() {
+  document.getElementById("notification").classList.add("hidden");
+}
+
+/** @param {"success" | "error" | null} status
+ *  @param {string} title
+ *  @param {string} description */
+function showNotification(status = null, title, description) {
+  const notificationElem = document.getElementById("notification");
+  if (status) notificationElem.classList.add(status);
+  document.getElementById("notification-status").innerHTML = title;
+  document.getElementById("notification-description").innerHTML = description;
+
+  notificationElem.classList.remove("hidden");
+}
+/** === end Notification === */
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchMetadata();

@@ -11,6 +11,25 @@
     <h1>Notion Market Importer</h1>
     <hr />
 
+    <aside
+      id="notification"
+      class="notification hidden"
+      role="region"
+      aria-label="System notification"
+    >
+      <div class="header">
+        <h2 id="notification-status">Status</h2>
+        <button
+          type="button"
+          onclick="hideNotification()"
+          aria-label="Close notification"
+        >
+          ×
+        </button>
+      </div>
+      <p id="notification-description">Description</p>
+    </aside>
+
     <fieldset>
       <legend>Dados da nota fiscal</legend>
 

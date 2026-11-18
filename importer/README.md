@@ -16,7 +16,7 @@
 - [x] Test notion integration.
 - [x] Get `Enum` values from notion.
 - [x] Final: CSS.
-- [ ] Create notification system to inform if saved or failed.
+- [x] Create notification system to inform if saved or failed.
 - [ ] Allow to change databases.
 
 ### Getting Started
